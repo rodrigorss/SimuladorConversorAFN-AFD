@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -40,9 +41,9 @@ public class App {
 		for (String letra : sAlfabeto.substring(1, sAlfabeto.length() - 1).split(","))
 			alfabeto.add(String.valueOf(letra.charAt(0)));
 		HashMap<String, Estado> estados = new HashMap<>();
-		// listaEstados.forEach(e -> estados.put(e, new Estado(e,
-		// estadosFinais.contains(e))));
+		listaEstados.forEach(e -> estados.put(e, new Estado(e, estadosFinais.contains(e))));
 		sc.nextLine(); // Pula "Prog"
+		List<Transicao> transicoes = new ArrayList<>();
 		while (sc.hasNext()) {
 			String l = sc.nextLine();
 			System.out.println("Linha: " + l);
@@ -53,10 +54,12 @@ public class App {
 			System.out.println("Estado Origem: " + estadoOrigem);
 			System.out.println("Símbolo: " + simbolo);
 			System.out.println("Estado Destino: " + estadoDestino);
-			// Transition transicao = new Transition(Character.MIN_VALUE,
-			// Character.MAX_VALUE, estados.get(estadoDestino));
-			// estados.get(estadoOrigem).addTransition(transicao);
+			transicoes.add(new Transicao(estados.get(estadoOrigem), simbolo, estados.get(estadoDestino)));
 		}
+		List<Estado> lEstados = new ArrayList<>(estados.values());
+		List<Estado> lEstadosFinais = lEstados.stream().filter(Estado::isFinal).collect(Collectors.toList());
+		AutomatoAFND afnd = new AutomatoAFND(lEstados, alfabeto, estados.get(estadoInicial), lEstadosFinais,
+				transicoes);
 	}
 
 }
