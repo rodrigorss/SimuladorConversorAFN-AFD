@@ -21,4 +21,9 @@ public class Transicao {
 	public Estado getEstadoResultante() {
 		return estadoResultante;
 	}
+	
+	@Override
+	public String toString() {
+		return "( "+getEstadoOrigem()+","+getSimboloLido()+" ) = "+getEstadoResultante();
+	}
 }

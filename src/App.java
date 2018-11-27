@@ -60,6 +60,10 @@ public class App {
 		List<Estado> lEstadosFinais = lEstados.stream().filter(Estado::isFinal).collect(Collectors.toList());
 		AutomatoAFND afnd = new AutomatoAFND(lEstados, alfabeto, estados.get(estadoInicial), lEstadosFinais,
 				transicoes);
+		System.out.println("\n//////////////////\n");
+		System.out.println(afnd.verificaSeAceitaPalavra("IRP"));
+		System.out.println(afnd.verificaSeAceitaPalavra("IRS"));
+		System.out.println(afnd.verificaSeAceitaPalavra("IRR"));
 	}
 
 }
