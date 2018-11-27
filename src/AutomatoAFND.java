@@ -10,7 +10,7 @@ public class AutomatoAFND {
 	// ESTADO INICIAL
 	private Estado estadoInicial;
 	// LISTA ESTADOS FINAIS
-	private List<Estado> listaEstadoFinal;
+	private List<Estado> listaEstadosFinal;
 	// LISTA DE PROG, ( Q0 , a ) = Q9 por exemplo
 	private List<Transicao> listaProducoes;
 	
@@ -21,7 +21,7 @@ public class AutomatoAFND {
 		this.listaEstadosAutomato = new LinkedList<>(listaEstados);
 		this.listaSimbolosAutomato = new LinkedList<>(listaSimbolos);
 		this.estadoInicial = estadoInit;
-		this.listaEstadoFinal = new LinkedList<>(listEstadosFim);
+		this.listaEstadosFinal = new LinkedList<>(listEstadosFim);
 		this.listaProducoes = new LinkedList<>(listaProd);
 		
 		this.listaEstadosCorrentes = new LinkedList<>();
@@ -33,7 +33,7 @@ public class AutomatoAFND {
 		
 		// Para cada simbolo vê como o automato se comporta nos estados correntes
 		for(char c : listaSimbolos) {
-			boolean executa = temProxEstados(c);
+			boolean executa = temProxEstados(c);//Se executou o simbolo e chegou em algum lugar válido
 			if(executa = true) {
 				// 	automato eceitou este simbolo de entrada e obteve, a partir dos estados correntes antigos e o simbolo de entrada,
 				// novos estados correntes.
@@ -45,7 +45,20 @@ public class AutomatoAFND {
 				return "O autômato não aceita a palavra :"+ palavra; // break
 			}
 		}
-		return "O autômato aceita a palavra :"+palavra;
+		// Agora basta verificar se no final da execução eu parei em algum estado final
+		boolean contemEstadoFinal = false;
+		for(Estado state : listaEstadosCorrentes) {
+			for(Estado stateFinal : listaEstadosFinal) {
+				if(state == stateFinal) {
+					contemEstadoFinal = true;
+				}
+			}
+		}
+		if(contemEstadoFinal == false) {
+			return "O autômato não aceita a palavra :"+ palavra;
+		}else {
+			return "O autômato não aceita a palavra :"+ palavra;
+		}
 	}
 	
 	//METODO QUE DADO UM SIMBOLO DE ENTRADA ME DIZ SE ACHOU ALGUM ESTADO NOVO A PARTIR DE ALGUM ESTADO CORRENTE E O SIMBOLO DE ENTRADA
