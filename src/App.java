@@ -61,9 +61,9 @@ public class App {
 		AutomatoAFND afnd = new AutomatoAFND(lEstados, alfabeto, estados.get(estadoInicial), lEstadosFinais,
 				transicoes);
 		System.out.println("\n//////////////////\n");
-		//System.out.println(afnd.verificaSeAceitaPalavra("IRP"));
-		//System.out.println(afnd.verificaSeAceitaPalavra("IRS"));
-		//System.out.println(afnd.verificaSeAceitaPalavra("IRR"));
+		// System.out.println(afnd.verificaSeAceitaPalavra("IRP"));
+		// System.out.println(afnd.verificaSeAceitaPalavra("IRS"));
+		// System.out.println(afnd.verificaSeAceitaPalavra("IRR"));
 		System.out.println(afnd.testaConversor());
 	}
 

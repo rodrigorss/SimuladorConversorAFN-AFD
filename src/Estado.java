@@ -16,20 +16,19 @@ public class Estado {
 	public String getNome() {
 		return nome;
 	}
-	
+
 	@Override
 	public String toString() {
 		return nome;
 	}
-	
+
 	@Override
 	public boolean equals(Object bagulho) {
-		return ((Estado)bagulho).getNome().equals(this.nome);
+		return ((Estado) bagulho).getNome().equals(this.nome);
 	}
 
-	/*@Override
-	public int compareTo(Estado state) {
-		if(state.getNome().equals(nome)) return 0;
-		return -1;
-	}*/
+	@Override
+	public int hashCode() {
+		return nome.hashCode();
+	}
 }

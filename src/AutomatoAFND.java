@@ -1,7 +1,6 @@
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class AutomatoAFND {
@@ -31,16 +30,16 @@ public class AutomatoAFND {
 		char[] listaSimbolos = palavra.toCharArray(); // lista com cada simbolo da palavra 1 a 1 separado
 		// Para cada simbolo v� como o automato se comporta nos estados correntes
 		for (char c : listaSimbolos) {
-			boolean executa = temProxEstados(c,listaEstadosCorrentes);// Se executou o simbolo e chegou em algum lugar v�lido
-			System.out.println("Simbolo lido: "+c);
-			if (executa = true) {
+			boolean executa = temProxEstados(c, listaEstadosCorrentes);// Se executou o simbolo e chegou em algum lugar
+																		// v�lido
+			System.out.println("Simbolo lido: " + c);
+			if (executa = true)
 				// automato eceitou este simbolo de entrada e obteve, a partir dos estados
 				// correntes antigos e o simbolo de entrada,
 				// novos estados correntes.
 				// OK, PROSSEGUIR
-				System.out.println("Executou para o simbolo :"+c);
-				
-			} else
+				System.out.println("Executou para o simbolo :" + c);
+			else
 				// automato n�o encontrou nenhuma producao que a partir de um estado corrente e
 				// o simbolo de entrada pedido resultasse
 				// em algum novo estado corrente.
@@ -56,7 +55,7 @@ public class AutomatoAFND {
 		if (contemEstadoFinal == false) {
 			System.out.println("Deu ruim no final");
 			return "O aut�mato n�o aceita a palavra :" + palavra;
-		}else {
+		} else {
 			System.out.println("Deu bom no final");
 			return "O aut�mato aceita a palavra :" + palavra;
 		}
@@ -66,7 +65,7 @@ public class AutomatoAFND {
 	// PARTIR DE ALGUM ESTADO CORRENTE E O SIMBOLO DE ENTRADA
 	// CASO TENHA ENCONTRADO J� TROCA O ESTADO CORRENTE PELO NOVO ESTADO GERADO A
 	// PARTIR DO ANTIGO CORRENTE E O SIMBOLO DE ENTRADA
-	private boolean temProxEstados(char simbolo,List<Estado> estadosCorrentes) {
+	private boolean temProxEstados(char simbolo, List<Estado> estadosCorrentes) {
 		boolean achouAlgumEstadoNovo = false;
 		List<Estado> RemoveCurrents = new LinkedList<>();
 		List<Estado> AddCurrents = new LinkedList<>();
@@ -81,7 +80,7 @@ public class AutomatoAFND {
 			// s�mbolo a partir deste estado corrente
 			// Remove o estado corrente, pois ele n�o levou a lugar algum
 			// N�o faz nada???
-			if (listProd.size()==0) {
+			if (listProd.size() == 0) {
 				RemoveCurrents.add(state);
 				continue; // SE PRA ESSE CORRENTE ATUAL N�O ACHOU PROD ENT�O PRA ESSE CORRENTE ATUAL VC
 							// REMOVE E VERIFICA OS OUTROS
@@ -95,79 +94,63 @@ public class AutomatoAFND {
 				AddCurrents.add(op.getEstadoResultante());
 			achouAlgumEstadoNovo = true;
 		}
-		for(Estado state: RemoveCurrents ) {
+		for (Estado state : RemoveCurrents)
 			estadosCorrentes.remove(state);
-		}
-		for(Estado state: AddCurrents ) {
+		for (Estado state : AddCurrents)
 			estadosCorrentes.add(state);
-		}
 		return achouAlgumEstadoNovo;
 	}
-	
-	public HashSet<ConjuntoEstados> testaConversor(){
+
+	public HashSet<ConjuntoEstados> testaConversor() {
 		return converteAFNDtoAFD(listaProducoes);
 	}
-	
+
 	public HashSet<ConjuntoEstados> converteAFNDtoAFD(List<Transicao> listTransicoes) {
 		List<Transicao> listAux = listTransicoes;
 		HashSet<ConjuntoEstados> estadosNovos = new HashSet<>();// Evitar que tenha coisas iguais
 		Estado origem;
 		Estado result;
 		String simbolo;
-		for(Transicao op1: listAux) {
-			//System.out.println("Op1 "+op1);
+		for (Transicao op1 : listAux) {
+			// System.out.println("Op1 "+op1);
 			origem = op1.getEstadoOrigem();
 			simbolo = op1.getSimboloLido();
 			result = op1.getEstadoResultante();
 			HashSet<Estado> listaEstadosResult = new HashSet<>(); // Quero ordem e não repetir
-			for(Transicao op2: listAux) {
-				//System.out.println("Op2 "+op2);
-				// ACHAR OUTRA OP COM MESMA ORIGEM MESMO SIMBOLO MAS RESULTADO DIFERENTE,pra n aceitar "ela mesma"
-				tentaAcharOpIgual(listaEstadosResult,op2,origem,simbolo,result);
-			}
-			// Se eu tiver achado pelo menos 2 prods com mesma origem e mesmo simbolo com result diferente
-			if(listaEstadosResult.size()>0) {
-				//System.out.println(listaEstadosResult);
+			for (Transicao op2 : listAux)
+				// System.out.println("Op2 "+op2);
+				// ACHAR OUTRA OP COM MESMA ORIGEM MESMO SIMBOLO MAS RESULTADO DIFERENTE,pra n
+				// aceitar "ela mesma"
+				tentaAcharOpIgual(listaEstadosResult, op2, origem, simbolo, result);
+			// Se eu tiver achado pelo menos 2 prods com mesma origem e mesmo simbolo com
+			// result diferente
+			if (listaEstadosResult.size() > 0) {
+				// System.out.println(listaEstadosResult);
 				List<Estado> list = listaEstadosResult.stream().collect(Collectors.toList());
-				ConjuntoEstados conjEstadoNovo = new ConjuntoEstados(list,false);
-				if(!estadosNovos.contains(conjEstadoNovo))estadosNovos.add(conjEstadoNovo);
+				ConjuntoEstados conjEstadoNovo = new ConjuntoEstados(list, false);
+				if (!estadosNovos.contains(conjEstadoNovo))
+					estadosNovos.add(conjEstadoNovo);
 			}
 		}
-		//System.out.println(estadosNovos);
+		// System.out.println(estadosNovos);
 		return estadosNovos;
 	}
-	
-	private void tentaAcharOpIgual(HashSet<Estado> listaEstadosResult, Transicao op,Estado origem, String simbolo,Estado result) {
-		/*for(Estado state : listaEstadosResult) {
-			System.out.print(state.getNome()+" ");
-		}*/
-		//System.out.println();
-		//System.out.println("----------");
-		if(op.getEstadoOrigem() == origem && op.getSimboloLido().equals(simbolo)  && op.getEstadoResultante() != result) {
-			//System.out.println("Resultado ants metodo"+listaEstadosResult);
+
+	private void tentaAcharOpIgual(HashSet<Estado> listaEstadosResult, Transicao op, Estado origem, String simbolo,
+			Estado result) {
+		/*
+		 * for(Estado state : listaEstadosResult) {
+		 * System.out.print(state.getNome()+" ");
+		 * }
+		 */
+		// System.out.println();
+		// System.out.println("----------");
+		if (op.getEstadoOrigem() == origem && op.getSimboloLido().equals(simbolo)
+				&& op.getEstadoResultante() != result) {
+			// System.out.println("Resultado ants metodo"+listaEstadosResult);
 			listaEstadosResult.add(result); // result op1
 			listaEstadosResult.add(op.getEstadoResultante());
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
