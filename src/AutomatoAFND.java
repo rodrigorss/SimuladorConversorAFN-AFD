@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,4 +102,44 @@ public class AutomatoAFND {
 		}
 		return achouAlgumEstadoNovo;
 	}
+	
+	
+	
+	public void converteAFNDtoAFD(List<Transicao> listTransicoes) {
+		List<Transicao> listAux = listTransicoes;
+		HashSet<Transicao> prodsQueRepetem = new HashSet<>();// Evitar que tenha coisas iguais
+		Estado origem;
+		String simbolo;
+		int cont;
+		for(Transicao op: listAux) {
+			origem = op.getEstadoOrigem();
+			simbolo = op.getSimboloLido();
+			for(Transicao op2: listAux) {
+				
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
