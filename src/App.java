@@ -7,9 +7,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dk.brics.automaton.Automaton;
-import dk.brics.automaton.Transition;
-
 public class App {
 
 	public static void main(String[] args) {
@@ -42,9 +39,9 @@ public class App {
 		String sAlfabeto = linhaMatcher.group(2);
 		for (String letra : sAlfabeto.substring(1, sAlfabeto.length() - 1).split(","))
 			alfabeto.add(String.valueOf(letra.charAt(0)));
-		Automaton aut = new Automaton();
+		// Automaton aut = new Automaton();
 		Estado inicial = new Estado(estadoInicial, estadosFinais.contains(estadoInicial));
-		aut.setInitialState(inicial);
+		// aut.setInitialState(inicial);
 		HashMap<String, Estado> estados = new HashMap<>();
 		listaEstados.forEach(e -> estados.put(e, new Estado(e, estadosFinais.contains(e))));
 		sc.nextLine(); // Pula "Prog"
@@ -58,8 +55,9 @@ public class App {
 			System.out.println("Estado Origem: " + estadoOrigem);
 			System.out.println("Símbolo: " + simbolo);
 			System.out.println("Estado Destino: " + estadoDestino);
-			Transition transicao = new Transition(Character.MIN_VALUE, Character.MAX_VALUE, estados.get(estadoDestino));
-			estados.get(estadoOrigem).addTransition(transicao);
+			// Transition transicao = new Transition(Character.MIN_VALUE,
+			// Character.MAX_VALUE, estados.get(estadoDestino));
+			// estados.get(estadoOrigem).addTransition(transicao);
 		}
 	}
 
