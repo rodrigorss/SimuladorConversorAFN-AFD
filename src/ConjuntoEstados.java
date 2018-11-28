@@ -6,6 +6,7 @@ public class ConjuntoEstados extends Estado {
 
 	public ConjuntoEstados(List<Estado> listaEstados, boolean estadoFinal) {
 		super(makeNome(listaEstados), estadoFinal);
+		this.listaEstados = listaEstados;
 	}
 
 	private static String makeNome(List<Estado> listaEstados) {
@@ -16,6 +17,8 @@ public class ConjuntoEstados extends Estado {
 			nome += state.getNome();
 		return nome;
 	}
+	
+	public List<Estado> getListaEstados(){ return listaEstados;}
 
 	@Override
 	public String getNome() {

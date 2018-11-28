@@ -62,9 +62,11 @@ public class App {
 				transicoes);
 		System.out.println("\n//////////////////\n");
 		// System.out.println(afnd.verificaSeAceitaPalavra("IRP"));
-		// System.out.println(afnd.verificaSeAceitaPalavra("IRS"));
+		//System.out.println(afnd.verificaSeAceitaPalavra("IRS"));
 		// System.out.println(afnd.verificaSeAceitaPalavra("IRR"));
-		System.out.println(afnd.testaConversor());
+		//System.out.println(afnd.testaConversor());
+		//System.out.println(afnd.getListaSimbolos());
+		System.out.println(afnd.converteParte2(afnd.testaConversor()));
 	}
 
 }

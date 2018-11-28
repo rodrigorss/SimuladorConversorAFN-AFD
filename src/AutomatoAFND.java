@@ -24,6 +24,7 @@ public class AutomatoAFND {
 		this.listaProducoes = new LinkedList<>(listaProd);
 	}
 
+	public List<String> getListaSimbolos(){ return listaSimbolosAutomato;}
 	public String verificaSeAceitaPalavra(String palavra) {
 		List<Estado> listaEstadosCorrentes = new LinkedList<>();
 		listaEstadosCorrentes.add(estadoInicial);
@@ -112,7 +113,6 @@ public class AutomatoAFND {
 		Estado result;
 		String simbolo;
 		for (Transicao op1 : listAux) {
-			// System.out.println("Op1 "+op1);
 			origem = op1.getEstadoOrigem();
 			simbolo = op1.getSimboloLido();
 			result = op1.getEstadoResultante();
@@ -125,29 +125,51 @@ public class AutomatoAFND {
 			// Se eu tiver achado pelo menos 2 prods com mesma origem e mesmo simbolo com
 			// result diferente
 			if (listaEstadosResult.size() > 0) {
-				// System.out.println(listaEstadosResult);
 				List<Estado> list = listaEstadosResult.stream().collect(Collectors.toList());
 				ConjuntoEstados conjEstadoNovo = new ConjuntoEstados(list, false);
 				if (!estadosNovos.contains(conjEstadoNovo))
 					estadosNovos.add(conjEstadoNovo);
 			}
 		}
-		// System.out.println(estadosNovos);
 		return estadosNovos;
+	}
+	
+	public HashSet<ConjuntoTransicao> testaParte2(){
+		return converteParte2(converteAFNDtoAFD(listaProducoes));
+	}
+	
+	public HashSet<ConjuntoTransicao> converteParte2(HashSet<ConjuntoEstados> listConjuntoEstados) {
+		HashSet<ConjuntoTransicao> conjTransicao = new HashSet<>();
+		HashSet<Estado> listaEstados = new HashSet<>();
+		for(ConjuntoEstados conjOrigem : listConjuntoEstados) {
+			HashSet<ConjuntoEstados> listConjResult = new HashSet<>();
+			for(String str : listaSimbolosAutomato) {
+				for(Estado state :conjOrigem.getListaEstados()) {// estado origem
+					listaEstados = new HashSet<>();
+					List<Transicao> listOp = listaProducoes.stream()
+							.filter(op -> op.getEstadoOrigem().equals(state))
+							.filter(op -> op.getSimboloLido().equals(str))
+							.collect(Collectors.toList());
+					System.out.println(listOp);
+					for(Transicao prod : listOp) {
+						listaEstados.add(prod.getEstadoResultante());
+					}
+				}
+				List<Estado> list = listaEstados.stream().collect(Collectors.toList());
+				ConjuntoEstados conjuntResult = new ConjuntoEstados(list,false);
+				System.out.println(conjuntResult);
+				listConjResult.add(conjuntResult);
+				ConjuntoTransicao prod = new ConjuntoTransicao(conjOrigem,str,conjuntResult);
+				conjTransicao.add(prod);
+			}
+		}
+		return conjTransicao;
 	}
 
 	private void tentaAcharOpIgual(HashSet<Estado> listaEstadosResult, Transicao op, Estado origem, String simbolo,
 			Estado result) {
-		/*
-		 * for(Estado state : listaEstadosResult) {
-		 * System.out.print(state.getNome()+" ");
-		 * }
-		 */
-		// System.out.println();
-		// System.out.println("----------");
 		if (op.getEstadoOrigem() == origem && op.getSimboloLido().equals(simbolo)
 				&& op.getEstadoResultante() != result) {
-			// System.out.println("Resultado ants metodo"+listaEstadosResult);
 			listaEstadosResult.add(result); // result op1
 			listaEstadosResult.add(op.getEstadoResultante());
 		}
