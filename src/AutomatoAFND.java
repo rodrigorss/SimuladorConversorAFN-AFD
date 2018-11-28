@@ -1,6 +1,7 @@
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class AutomatoAFND {
@@ -103,24 +104,51 @@ public class AutomatoAFND {
 		return achouAlgumEstadoNovo;
 	}
 	
-	
-	
-	public void converteAFNDtoAFD(List<Transicao> listTransicoes) {
-		List<Transicao> listAux = listTransicoes;
-		HashSet<Transicao> prodsQueRepetem = new HashSet<>();// Evitar que tenha coisas iguais
-		Estado origem;
-		String simbolo;
-		int cont;
-		for(Transicao op: listAux) {
-			origem = op.getEstadoOrigem();
-			simbolo = op.getSimboloLido();
-			for(Transicao op2: listAux) {
-				
-			}
-		}
+	public HashSet<ConjuntoEstados> testaConversor(){
+		return converteAFNDtoAFD(listaProducoes);
 	}
 	
+	public HashSet<ConjuntoEstados> converteAFNDtoAFD(List<Transicao> listTransicoes) {
+		List<Transicao> listAux = listTransicoes;
+		HashSet<ConjuntoEstados> estadosNovos = new HashSet<>();// Evitar que tenha coisas iguais
+		Estado origem;
+		Estado result;
+		String simbolo;
+		for(Transicao op1: listAux) {
+			//System.out.println("Op1 "+op1);
+			origem = op1.getEstadoOrigem();
+			simbolo = op1.getSimboloLido();
+			result = op1.getEstadoResultante();
+			HashSet<Estado> listaEstadosResult = new HashSet<>(); // Quero ordem e não repetir
+			for(Transicao op2: listAux) {
+				//System.out.println("Op2 "+op2);
+				// ACHAR OUTRA OP COM MESMA ORIGEM MESMO SIMBOLO MAS RESULTADO DIFERENTE,pra n aceitar "ela mesma"
+				tentaAcharOpIgual(listaEstadosResult,op2,origem,simbolo,result);
+			}
+			// Se eu tiver achado pelo menos 2 prods com mesma origem e mesmo simbolo com result diferente
+			if(listaEstadosResult.size()>0) {
+				//System.out.println(listaEstadosResult);
+				List<Estado> list = listaEstadosResult.stream().collect(Collectors.toList());
+				ConjuntoEstados conjEstadoNovo = new ConjuntoEstados(list,false);
+				if(!estadosNovos.contains(conjEstadoNovo))estadosNovos.add(conjEstadoNovo);
+			}
+		}
+		//System.out.println(estadosNovos);
+		return estadosNovos;
+	}
 	
+	private void tentaAcharOpIgual(HashSet<Estado> listaEstadosResult, Transicao op,Estado origem, String simbolo,Estado result) {
+		/*for(Estado state : listaEstadosResult) {
+			System.out.print(state.getNome()+" ");
+		}*/
+		//System.out.println();
+		//System.out.println("----------");
+		if(op.getEstadoOrigem() == origem && op.getSimboloLido().equals(simbolo)  && op.getEstadoResultante() != result) {
+			//System.out.println("Resultado ants metodo"+listaEstadosResult);
+			listaEstadosResult.add(result); // result op1
+			listaEstadosResult.add(op.getEstadoResultante());
+		}
+	}
 	
 	
 	

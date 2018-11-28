@@ -12,4 +12,10 @@ public class ConjuntoEstados extends Estado {
 		for(Estado state : listaEstados) {nome+= state.getNome();}
 		return nome;
 	}
+	
+	@Override
+	public boolean equals(Object bagulho) {
+		ConjuntoEstados cj = (ConjuntoEstados)bagulho;
+		return cj.getNome() == this.getNome();
+	}
 }
