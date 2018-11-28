@@ -168,8 +168,8 @@ public class AutomatoAFND {
 
 	private void tentaAcharOpIgual(HashSet<Estado> listaEstadosResult, Transicao op, Estado origem, String simbolo,
 			Estado result) {
-		if (op.getEstadoOrigem() == origem && op.getSimboloLido().equals(simbolo)
-				&& op.getEstadoResultante() != result) {
+		if (op.getEstadoOrigem().equals(origem) && op.getSimboloLido().equals(simbolo)
+				&& !op.getEstadoResultante().equals(result)) {
 			listaEstadosResult.add(result); // result op1
 			listaEstadosResult.add(op.getEstadoResultante());
 		}
