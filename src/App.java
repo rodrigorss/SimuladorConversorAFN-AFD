@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class App {
 
@@ -42,8 +41,8 @@ public class App {
 			alfabeto.add(String.valueOf(letra.charAt(0)));
 		HashMap<String, Estado> estados = new HashMap<>();
 		listaEstados.forEach(e -> estados.put(e, new Estado(e, estadosFinais.contains(e))));
+		Estado eInicial = estados.get(estadoInicial);
 		sc.nextLine(); // Pula "Prog"
-		List<Transicao> transicoes = new ArrayList<>();
 		while (sc.hasNext()) {
 			String l = sc.nextLine();
 			System.out.println("Linha: " + l);
@@ -54,16 +53,10 @@ public class App {
 			System.out.println("Estado Origem: " + estadoOrigem);
 			System.out.println("Símbolo: " + simbolo);
 			System.out.println("Estado Destino: " + estadoDestino);
-			transicoes.add(new Transicao(estados.get(estadoOrigem), simbolo, estados.get(estadoDestino)));
+			estados.get(estadoOrigem).adicionarTransicao(simbolo, estados.get(estadoDestino));
 		}
-		List<Estado> lEstados = new ArrayList<>(estados.values());
-		List<Estado> lEstadosFinais = lEstados.stream().filter(Estado::isFinal).collect(Collectors.toList());
-		AutomatoAFND afnd = new AutomatoAFND(lEstados, alfabeto, estados.get(estadoInicial), lEstadosFinais,
-				transicoes);
-		System.out.println("\n//////////////////\n");
-		System.out.println(afnd.verificaSeAceitaPalavra("IRP"));
-		System.out.println(afnd.verificaSeAceitaPalavra("IRS"));
-		System.out.println(afnd.verificaSeAceitaPalavra("IRR"));
+		Automato aut = new Automato(nomeAutomato, eInicial, estados, alfabeto);
+		aut.converteAFNparaAFD();
 	}
 
 }
