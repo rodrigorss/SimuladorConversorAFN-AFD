@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -133,4 +134,50 @@ public class Automato {
 		return novoEstado.stream().anyMatch(e -> e.isFinal());
 	}
 
+	public String testaPalavra(String palavra) {
+		List<Estado> listEstadosCorrentes = new LinkedList<>();
+		listEstadosCorrentes.add(estadoInicial);
+		char simbolos[] = palavra.toCharArray();
+
+		//Para cada simbolo, verificar como ficam os estados correntes.
+		for (char c : simbolos) {
+			boolean temProxEstados = verificaProxEstado(listEstadosCorrentes, c);
+			if (temProxEstados)
+				continue;// Ta okay
+			else
+				return "O automato nao aceita a palavra :" + palavra;
+		}
+		boolean temEstadoFinal = false;
+		for (Estado state : listEstadosCorrentes) {
+			if (state.isFinal())
+				temEstadoFinal = true;
+			break;
+		}
+		if (temEstadoFinal)
+			return "O automato aceita a palavra :" + palavra;
+		else
+			return "O automato nao aceita a palavra :" + palavra;
+	}
+
+	private boolean verificaProxEstado(List<Estado> listEstadosCorrentes, char simbolo) {
+		boolean achou = false;
+		List<Estado> list = listEstadosCorrentes;
+		//Para cada estado verifica pra onde vai
+		for (Estado state : list) {
+			//Pega para o estado corrente do laço as possibilidades com o simbolo recebido
+			List<Estado> prods = state.getTransicoes().get(String.valueOf(simbolo));
+			//Se o mapa estiver vazio então a partir do estado corrente não existem novos estados possiveis
+			if (prods.isEmpty()) {
+				listEstadosCorrentes.remove(state);
+				continue;
+			}//pula o resto dos passos
+			//Se não estiver vazia, então existe um estado novo valido a partir do simbolo recebido
+			listEstadosCorrentes.remove(state);//Remove o estado antigo, de onde veio
+			//Adiciona os novos estados atingidos na lista de estados correntes
+			for (Estado atual : prods)
+				listEstadosCorrentes.add(atual);
+			achou = true;
+		}
+		return achou;
+	}
 }
