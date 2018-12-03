@@ -15,8 +15,8 @@ public class Estado {
 	}
 
 	public Map<String, List<Estado>> getTransicoes() {
-		//return Collections.unmodifiableMap(transicoes);
-		return transicoes;
+		return Collections.unmodifiableMap(transicoes);
+		//return transicoes;
 	}
 
 	public void adicionarTransicao(String simbolo, List<Estado> estados) {
