@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: white;"  xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="visao.TelaPrincipal">
+  <children>
+    <MenuBar fx:id="menubar" VBox.vgrow="NEVER">
+      <menus>
+        <Menu fx:id="menuArquivo" mnemonicParsing="false" text="Arquivo">
+          <items>
+            <MenuItem fx:id="miAbrir" mnemonicParsing="false" text="Abrir..." />
+            <MenuItem fx:id="miFechar" mnemonicParsing="false" text="Fechar" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="miSalvarImagem" mnemonicParsing="false" text="Salvar imagem" />
+            <MenuItem fx:id="miSalvarImagemComo" mnemonicParsing="false" text="Salvar imagem como..." />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="miSair" mnemonicParsing="false" text="Sair" />
+          </items>
+        </Menu>
+        <Menu fx:id="menuOpcoes" mnemonicParsing="false" text="Opções">
+          <items>
+            <MenuItem fx:id="miConverterAFD" mnemonicParsing="false" text="Converter para AFD" />
+            <MenuItem fx:id="miTestarPalavras" mnemonicParsing="false" text="Testar palavras" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white;" prefHeight="780.0" prefWidth="1280.0">
+         <children>
+            <ImageView fx:id="ivImagem" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+         </children></AnchorPane>
+  </children>
+</VBox>

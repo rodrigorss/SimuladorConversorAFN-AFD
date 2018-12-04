@@ -1,3 +1,5 @@
+package core;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +26,14 @@ public class MatrizConversao {
 
 	public Set<Estado> get(int linha, int coluna) {
 		return linhas.get(coluna).get(linha);
+	}
+
+	public int numLinhas() {
+		return linhas.size();
+	}
+
+	public int numColunas() {
+		return linhas.get(0).size();
 	}
 
 	@Override
