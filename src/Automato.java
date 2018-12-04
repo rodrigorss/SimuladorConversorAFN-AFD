@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.TreeSet;
 
 public class Automato {
@@ -134,13 +135,15 @@ public class Automato {
 		return novoEstado.stream().anyMatch(e -> e.isFinal());
 	}
 
-	public String testaPalavra(String palavra) {
+	public String testaPalavraAFND(String palavra) {
+		System.out.println("\nTestando a palavra "+palavra);
 		List<Estado> listEstadosCorrentes = new LinkedList<>();
 		listEstadosCorrentes.add(estadoInicial);
 		char simbolos[] = palavra.toCharArray();
 
 		//Para cada simbolo, verificar como ficam os estados correntes.
 		for (char c : simbolos) {
+			System.out.println("Estado sendo testado :"+listEstadosCorrentes +",Simbolo testado atual :"+ c);
 			boolean temProxEstados = verificaProxEstado(listEstadosCorrentes, c);
 			if (temProxEstados)
 				continue;// Ta okay
@@ -153,7 +156,7 @@ public class Automato {
 				temEstadoFinal = true;
 			break;
 		}
-		if (temEstadoFinal)
+		if(temEstadoFinal)
 			return "O automato aceita a palavra :" + palavra;
 		else
 			return "O automato nao aceita a palavra :" + palavra;
@@ -162,22 +165,27 @@ public class Automato {
 	private boolean verificaProxEstado(List<Estado> listEstadosCorrentes, char simbolo) {
 		boolean achou = false;
 		List<Estado> list = listEstadosCorrentes;
+		List<Estado> remove = new LinkedList<>();/////AUX
+		List<Estado> adiciona = new LinkedList<>();///AUX
 		//Para cada estado verifica pra onde vai
 		for (Estado state : list) {
 			//Pega para o estado corrente do laço as possibilidades com o simbolo recebido
-			List<Estado> prods = state.getTransicoes().get(String.valueOf(simbolo));
+			List<Estado> prods = new LinkedList<>();
+			List<Estado> aux = state.getTransicoes().get(String.valueOf(simbolo));
+			if(aux != null)prods.addAll(aux);
 			//Se o mapa estiver vazio então a partir do estado corrente não existem novos estados possiveis
 			if (prods.isEmpty()) {
-				listEstadosCorrentes.remove(state);
-				continue;
-			}//pula o resto dos passos
+				remove.add(state);
+				continue;//pula o resto dos passos
+			}
 			//Se não estiver vazia, então existe um estado novo valido a partir do simbolo recebido
-			listEstadosCorrentes.remove(state);//Remove o estado antigo, de onde veio
+			remove.add(state);
 			//Adiciona os novos estados atingidos na lista de estados correntes
-			for (Estado atual : prods)
-				listEstadosCorrentes.add(atual);
+			for (Estado atual : prods) {adiciona.add(atual);}
 			achou = true;
 		}
+		for(Estado e : remove) {listEstadosCorrentes.remove(e);}
+		for(Estado e : adiciona) {listEstadosCorrentes.add(e);}
 		return achou;
 	}
 }

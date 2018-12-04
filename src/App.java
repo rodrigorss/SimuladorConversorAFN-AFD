@@ -56,7 +56,9 @@ public class App {
 			estados.get(estadoOrigem).adicionarTransicao(simbolo, estados.get(estadoDestino));
 		}
 		Automato aut = new Automato(nomeAutomato, eInicial, estados, alfabeto);
-		aut.converteAFNparaAFD();
+		//aut.converteAFNparaAFD();
+		System.out.println("\n"+aut.testaPalavraAFND("IRSNRPNRRNPRNPPNPPNPS"));
+
 	}
 
 }
