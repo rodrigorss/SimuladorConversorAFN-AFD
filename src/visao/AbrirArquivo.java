@@ -34,14 +34,10 @@ public class AbrirArquivo implements Initializable {
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("Arquivo de Entrada", "*.txt"));
 		try {
 			File arquivo = fileChooser.showOpenDialog(App.getMainStage());
+			if (arquivo == null)
+				return;
 			Automato aut = Automato.lerAutomato(arquivo);
 			App.setAutomato(aut);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Util.mostrarErro("Erro!",
-					"Não foi possível carregar o arquivo! Por favor, verifique se ele está no formato adequado.");
-		}
-		try {
 			FXMLLoader loader = new FXMLLoader();
 			Parent layout = loader.load(arquivoTela);
 			Scene scene = new Scene(layout);
@@ -52,6 +48,11 @@ public class AbrirArquivo implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			Util.mostrarErro("Erro!", "Um erro ocorreu! Não foi possível carregar o programa.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Util.mostrarErro("Erro!",
+					"Não foi possível carregar o arquivo! Por favor, verifique se ele está no formato adequado.");
 		}
 	}
 
