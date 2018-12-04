@@ -44,7 +44,6 @@ public class Automato {
 	}
 
 	public List<String> getEstadosAtingiveis(String simbolo, Estado estado) {
-		System.out.println("gea - " + simbolo + " - " + estado);
 		List<String> estados = estado.getTransicoes().get(simbolo);
 		if (estados == null)
 			return new ArrayList<>();
@@ -67,7 +66,6 @@ public class Automato {
 		MatrizConversao matriz = new MatrizConversao(simbolos.size());
 		int linha = 0, coluna = 0;
 		while (!listaConjuntos.isEmpty()) {
-			System.out.println("LC = " + listaConjuntos);
 			coluna = 0;
 			TreeSet<Estado> estado = listaConjuntos.remove(0);
 			Map<String, List<String>> novasTransicoes = new HashMap<>();
@@ -76,21 +74,16 @@ public class Automato {
 			while (sbit.hasNext())
 				sb.append(sbit.next().getNome());
 			String nomeEstado = sb.toString();
-			System.out.print(linha + " " + coluna + " - " + nomeEstado + " -> ");
 			matriz.set(coluna, linha, estado);
 			coluna++;
-			System.out.println(matriz);
 			for (String simbolo : simbolos) {
 				TreeSet<Estado> novoEstado = new TreeSet<>();
-				System.out.println("-> " + getEstadosAtingiveis(simbolo, estados.get(nomeEstado)));
 				List<String> estadosAtingiveis = getEstadosAtingiveis(simbolo, estados.get(nomeEstado));
 				estadosAtingiveis.forEach(e -> novoEstado.add(estados.get(e)));
-				System.out.print(linha + " " + coluna + " -> ");
 				matriz.set(coluna, linha, novoEstado);
 				coluna++;
 				if (novoEstado.isEmpty())
 					continue;
-				System.out.println(matriz);
 				sb = new StringBuilder();
 				sbit = novoEstado.iterator();
 				while (sbit.hasNext())
@@ -110,16 +103,11 @@ public class Automato {
 					});
 				}
 				estados.put(nomeNovoEstado, eNovoEstado);
-				System.out.println("LC = " + listaConjuntos);
 			}
 			estado.forEach(e -> e.setTransicoes(novasTransicoes));
 			linha++;
 		}
-		System.out.println(matriz);
-		System.out.println("Q=" + Q);
-		System.out.println("F=" + F);
 		// Renomeando e salvando os nomes antigos com o novo nome
-		System.out.println("Renomeando");
 		int i = 0;
 		HashMap<String, String> nomesAntigos = new HashMap<>();
 		Iterator<Estado> it = Q.iterator();
@@ -129,9 +117,6 @@ public class Automato {
 			nomesAntigos.put(e.getNome(), novoNome);
 			e.setNome(novoNome);
 		}
-		System.out.println("Q=" + Q);
-		System.out.println("F=" + F);
-		System.out.println("Inicial=" + this.estadoInicial);
 
 		// Definindo os novos estados no autômato e corrigindo nomes dos destinos
 		HashMap<String, Estado> novosEstados = new HashMap<>();
@@ -151,7 +136,6 @@ public class Automato {
 		Iterator<Estado> it = novoEstado.iterator();
 		while (it.hasNext()) {
 			Estado e = it.next();
-			System.out.println(e);
 			for (String simbolo : simbolos) {
 				List<String> estados = getEstadosAtingiveis(simbolo, e);
 				if (estados.isEmpty())
@@ -166,14 +150,12 @@ public class Automato {
 	}
 
 	public boolean testaPalavra(String palavra) {
-		System.out.println("\nTestando a palavra " + palavra);
 		List<Estado> listEstadosCorrentes = new LinkedList<>();
 		listEstadosCorrentes.add(estadoInicial);
 		char simbolos[] = palavra.toCharArray();
 
 		//Para cada simbolo, verificar como ficam os estados correntes.
 		for (char c : simbolos) {
-			System.out.println("Estado sendo testado :" + listEstadosCorrentes + ",Simbolo testado atual :" + c);
 			boolean temProxEstados = verificaProxEstado(listEstadosCorrentes, c);
 			if (temProxEstados)
 				continue;// Ta okay
