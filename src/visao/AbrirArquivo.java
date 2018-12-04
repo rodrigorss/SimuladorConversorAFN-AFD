@@ -12,13 +12,11 @@ import core.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Screen;
 
 public class AbrirArquivo implements Initializable {
 
@@ -49,10 +47,8 @@ public class AbrirArquivo implements Initializable {
 			Scene scene = new Scene(layout);
 			App.getMainStage().setScene(scene);
 			App.getMainStage().resizableProperty().set(true);
+			App.getMainStage().setMaximized(true);
 			App.getMainStage().show();
-			Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-			App.getMainStage().setX((primScreenBounds.getWidth() - App.getMainStage().getWidth()) / 2);
-			App.getMainStage().setY((primScreenBounds.getHeight() - App.getMainStage().getHeight()) / 2);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Util.mostrarErro("Erro!", "Um erro ocorreu! Não foi possível carregar o programa.");
