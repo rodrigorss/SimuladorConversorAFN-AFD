@@ -3,6 +3,7 @@ package core;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -95,7 +96,7 @@ public class Automato {
 				while (sbit.hasNext())
 					sb.append(sbit.next().getNome());
 				String nomeNovoEstado = sb.toString();
-				Estado eNovoEstado = new Estado(nomeNovoEstado, conjuntoContemEstadoFinal(novoEstado));
+				Estado eNovoEstado = new Estado(nomeNovoEstado, colecaoContemEstadoFinal(novoEstado));
 				adicionarTransicoes(novoEstado, eNovoEstado);
 				novasTransicoes.put(simbolo, new ArrayList<>(Collections.singleton(nomeNovoEstado)));
 				TreeSet<Estado> conjuntoNovoEstado = new TreeSet<>();
@@ -160,54 +161,57 @@ public class Automato {
 		}
 	}
 
-	private boolean conjuntoContemEstadoFinal(TreeSet<Estado> novoEstado) {
-		return novoEstado.stream().anyMatch(e -> e.isFinal());
+	private boolean colecaoContemEstadoFinal(Collection<Estado> colecao) {
+		return colecao.stream().anyMatch(e -> e.isFinal());
 	}
 
-	public String testaPalavra(String palavra) {
+	public boolean testaPalavra(String palavra) {
+		System.out.println("\nTestando a palavra " + palavra);
 		List<Estado> listEstadosCorrentes = new LinkedList<>();
 		listEstadosCorrentes.add(estadoInicial);
 		char simbolos[] = palavra.toCharArray();
 
 		//Para cada simbolo, verificar como ficam os estados correntes.
 		for (char c : simbolos) {
+			System.out.println("Estado sendo testado :" + listEstadosCorrentes + ",Simbolo testado atual :" + c);
 			boolean temProxEstados = verificaProxEstado(listEstadosCorrentes, c);
 			if (temProxEstados)
 				continue;// Ta okay
 			else
-				return "O automato nao aceita a palavra :" + palavra;
+				return false;
 		}
-		boolean temEstadoFinal = false;
-		for (Estado state : listEstadosCorrentes) {
-			if (state.isFinal())
-				temEstadoFinal = true;
-			break;
-		}
-		if (temEstadoFinal)
-			return "O automato aceita a palavra :" + palavra;
-		else
-			return "O automato nao aceita a palavra :" + palavra;
+		boolean temEstadoFinal = colecaoContemEstadoFinal(listEstadosCorrentes);
+		return temEstadoFinal;
 	}
 
 	private boolean verificaProxEstado(List<Estado> listEstadosCorrentes, char simbolo) {
 		boolean achou = false;
 		List<Estado> list = listEstadosCorrentes;
+		List<Estado> remove = new LinkedList<>();/////AUX
+		List<Estado> adiciona = new LinkedList<>();///AUX
 		//Para cada estado verifica pra onde vai
 		for (Estado state : list) {
 			//Pega para o estado corrente do laço as possibilidades com o simbolo recebido
-			List<String> prods = state.getTransicoes().get(String.valueOf(simbolo));
+			List<String> prods = new LinkedList<>();
+			List<String> aux = state.getTransicoes().get(String.valueOf(simbolo));
+			if (aux != null)
+				prods.addAll(aux);
 			//Se o mapa estiver vazio então a partir do estado corrente não existem novos estados possiveis
 			if (prods.isEmpty()) {
-				listEstadosCorrentes.remove(state);
-				continue;
-			}//pula o resto dos passos
-				//Se não estiver vazia, então existe um estado novo valido a partir do simbolo recebido
-			listEstadosCorrentes.remove(state);//Remove o estado antigo, de onde veio
+				remove.add(state);
+				continue;//pula o resto dos passos
+			}
+			//Se não estiver vazia, então existe um estado novo valido a partir do simbolo recebido
+			remove.add(state);
 			//Adiciona os novos estados atingidos na lista de estados correntes
 			for (String atual : prods)
-				listEstadosCorrentes.add(estados.get(atual));
+				adiciona.add(estados.get(atual));
 			achou = true;
 		}
+		for (Estado e : remove)
+			listEstadosCorrentes.remove(e);
+		for (Estado e : adiciona)
+			listEstadosCorrentes.add(e);
 		return achou;
 	}
 

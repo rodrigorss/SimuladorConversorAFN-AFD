@@ -1,5 +1,8 @@
 package core;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import guru.nidi.graphviz.engine.Graphviz;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,17 +28,8 @@ public class App extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		Parent layout = loader.load(getClass().getResourceAsStream("/AbrirArquivo.fxml"));
-		Scene scene = new Scene(layout);
-		mainStage = primaryStage;
-		primaryStage.resizableProperty().set(false);
-		primaryStage.setTitle("Simulador e Conversor de AFN para AFD");
-		primaryStage.setScene(scene);
-		primaryStage.show();
-		Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-		primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-		primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+		App.mainStage = primaryStage;
+		carregarAbrirArquivo(getClass().getResourceAsStream("/AbrirArquivo.fxml"));
 	}
 
 	public static void setAutomato(Automato automato) {
@@ -44,6 +38,20 @@ public class App extends Application {
 
 	public static Automato getAutomato() {
 		return automato;
+	}
+
+	public static void carregarAbrirArquivo(InputStream arquivo) throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		Parent layout = loader.load(arquivo);
+		Scene scene = new Scene(layout);
+		Stage stage = App.mainStage;
+		stage.resizableProperty().set(false);
+		stage.setTitle("Simulador e Conversor de AFN para AFD");
+		stage.setScene(scene);
+		stage.show();
+		Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+		stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+		stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
 	}
 
 }

@@ -2,6 +2,7 @@ package visao;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -15,7 +16,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Screen;
@@ -25,17 +25,13 @@ public class AbrirArquivo implements Initializable {
 	@FXML
 	private Button btnAbrirArquivo;
 
-	@FXML
-	private Label lbCarregando;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		btnAbrirArquivo.setOnAction(e -> escolherArquivo());
-		lbCarregando.setText("");
+		btnAbrirArquivo.setOnAction(e -> escolherArquivo(getClass().getResourceAsStream("/TelaPrincipal.fxml")));
 
 	}
 
-	private void escolherArquivo() {
+	public static void escolherArquivo(InputStream arquivoTela) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("Arquivo de Entrada", "*.txt"));
 		try {
@@ -47,10 +43,9 @@ public class AbrirArquivo implements Initializable {
 			Util.mostrarErro("Erro!",
 					"Não foi possível carregar o arquivo! Por favor, verifique se ele está no formato adequado.");
 		}
-		lbCarregando.setText("Carregando...");
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			Parent layout = loader.load(getClass().getResourceAsStream("/TelaPrincipal.fxml"));
+			Parent layout = loader.load(arquivoTela);
 			Scene scene = new Scene(layout);
 			App.getMainStage().setScene(scene);
 			App.getMainStage().resizableProperty().set(true);

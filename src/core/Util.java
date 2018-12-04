@@ -13,4 +13,12 @@ public class Util {
 		alert.showAndWait();
 	}
 
+	public static void mostrarMensagem(String titulo, String mensagem) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle(titulo);
+		alert.setHeaderText(titulo);
+		alert.setContentText(mensagem);
+		alert.showAndWait();
+	}
+
 }
