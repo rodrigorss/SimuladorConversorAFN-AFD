@@ -1,12 +1,13 @@
+package core;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Estado implements Comparable<Estado> {
 	private String nome;
-	private Map<String, List<Estado>> transicoes;
+	private Map<String, List<String>> transicoes;
 	private boolean estadoFinal;
 
 	public Estado(String nome, boolean estadoFinal) {
@@ -15,25 +16,33 @@ public class Estado implements Comparable<Estado> {
 		transicoes = new HashMap<>();
 	}
 
-	public Map<String, List<Estado>> getTransicoes() {
-		return Collections.unmodifiableMap(transicoes);
+	public Map<String, List<String>> getTransicoes() {
+		return transicoes;
 	}
 
-	public void adicionarTransicao(String simbolo, Estado estado) {
+	public void adicionarTransicao(String simbolo, String estado) {
 		if (transicoes.containsKey(simbolo))
 			transicoes.get(simbolo).add(estado);
 		else {
-			List<Estado> estados = new ArrayList<>();
+			List<String> estados = new ArrayList<>();
 			estados.add(estado);
 			transicoes.put(simbolo, estados);
 		}
 	}
 
-	public void adicionarTransicao(String simbolo, List<Estado> estados) {
+	public void adicionarTransicao(String simbolo, List<String> estados) {
 		if (transicoes.containsKey(simbolo))
 			estados.forEach(e -> transicoes.get(simbolo).add(e));
 		else
 			transicoes.put(simbolo, estados);
+	}
+
+	public void limparTransicoes() {
+		this.transicoes = new HashMap<>();
+	}
+
+	public void setTransicoes(Map<String, List<String>> transicoes) {
+		this.transicoes = transicoes;
 	}
 
 	public boolean isFinal() {
